@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FinTracker</title>
+  <meta name="description" content="FinTracker, aplikasi Android untuk mencatat dan membagi uang saku ke kantong-kantong pengeluaran.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff5f7;
+      --card: #ffffff;
+      --soft: #fbe3e8;
+      --accent: #e48b9b;
+      --accent-dark: #c9657a;
+      --deep: #3b2530;
+      --text: #2a2226;
+      --muted: #7a6a70;
+      --mint: #c8efe0;
+      --sun: #ffe3a8;
+      --sky: #d6e6ff;
+      --lilac: #e8dcff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    nav {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(255, 245, 247, .85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(228, 139, 155, .18);
+    }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; text-decoration: none; }
+    .brand .mark {
+      width: 36px; height: 36px; border-radius: 11px;
+      background: linear-gradient(135deg, #f2a9b6, var(--accent-dark));
+      color: #fff; display: grid; place-items: center; font-size: 18px;
+    }
+    .nav-btn {
+      text-decoration: none; background: var(--deep); color: #fff;
+      padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 14px;
+    }
+
+    .hero { position: relative; padding: 56px 0 72px; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(50px); opacity: .55; z-index: 0; }
+    .blob.b1 { width: 340px; height: 340px; background: #f7b6c3; top: -60px; left: -120px; }
+    .blob.b2 { width: 280px; height: 280px; background: var(--sun); top: 120px; right: -80px; }
+    .blob.b3 { width: 240px; height: 240px; background: var(--lilac); bottom: -40px; left: 40%; }
+
+    .hero-grid {
+      position: relative; z-index: 1;
+      display: grid; gap: 48px; align-items: center;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 860px) { .hero-grid { grid-template-columns: 1.1fr .9fr; } }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; border: 1.5px solid var(--deep);
+      padding: 6px 14px; border-radius: 30px; font-size: 13px; font-weight: 700;
+    }
+    .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: #3cc48a; }
+
+    h1 {
+      font-size: clamp(36px, 7vw, 60px); line-height: 1.08;
+      margin: 18px 0 16px; letter-spacing: -1.5px; font-weight: 800;
+    }
+    h1 .hl {
+      background: linear-gradient(120deg, var(--accent-dark), #f08aa0 60%, #f5a76b);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .lead { font-size: 18px; color: var(--muted); max-width: 520px; margin: 0 0 30px; }
+
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      text-decoration: none; background: var(--accent); color: #fff;
+      padding: 15px 26px; border-radius: 40px; font-weight: 800; font-size: 17px;
+      box-shadow: 0 6px 0 var(--accent-dark), 0 14px 30px rgba(228, 139, 155, .45);
+      transition: transform .12s, box-shadow .12s;
+    }
+    .btn:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--accent-dark), 0 10px 22px rgba(228, 139, 155, .45); }
+    .btn svg { width: 22px; height: 22px; }
+    .btn small { display: block; font-size: 12px; font-weight: 600; opacity: .9; line-height: 1.2; }
+    .btn-ghost {
+      text-decoration: none; font-weight: 700; font-size: 15px;
+      padding: 14px 20px; border-radius: 40px; border: 2px solid var(--deep); background: #fff;
+    }
+    .mini { margin-top: 18px; font-size: 14px; color: var(--muted); }
+    .mini a { color: var(--accent-dark); font-weight: 700; }
+
+    .phone-zone { position: relative; display: flex; justify-content: center; }
+    .phone {
+      position: relative; width: 270px; height: 560px;
+      background: var(--deep); border-radius: 44px; padding: 12px;
+      box-shadow: 0 30px 60px rgba(59, 37, 48, .28);
+      animation: float 6s ease-in-out infinite;
+    }
+    .screen {
+      width: 100%; height: 100%; border-radius: 34px; overflow: hidden;
+      background: #fff7f9; padding: 30px 16px 16px; position: relative;
+    }
+    .screen::before {
+      content: ""; position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+      width: 80px; height: 18px; border-radius: 12px; background: var(--deep);
+    }
+    .s-hello { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+    .s-title { font-size: 17px; font-weight: 800; margin: 0 0 12px; }
+    .s-balance {
+      background: linear-gradient(135deg, #f2a9b6, var(--accent-dark));
+      color: #fff; border-radius: 20px; padding: 16px;
+    }
+    .s-balance .lbl { font-size: 11px; opacity: .9; }
+    .s-balance .amt { font-size: 24px; font-weight: 800; letter-spacing: -.5px; }
+    .s-bar { height: 7px; background: rgba(255,255,255,.35); border-radius: 10px; margin-top: 10px; overflow: hidden; }
+    .s-bar i { display: block; height: 100%; width: 64%; background: #fff; border-radius: 10px; }
+    .s-bar-note { font-size: 10.5px; margin-top: 6px; opacity: .9; }
+    .s-sec { font-size: 12.5px; font-weight: 800; margin: 16px 0 8px; }
+    .pocket {
+      display: flex; align-items: center; gap: 10px;
+      background: #fff; border-radius: 14px; padding: 9px 10px; margin-bottom: 8px;
+      border: 1px solid #f1dde2;
+    }
+    .pocket .ic { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; font-size: 16px; }
+    .pocket .nm { font-size: 12px; font-weight: 700; flex: 1; line-height: 1.25; }
+    .pocket .nm span { display: block; font-size: 10px; color: var(--muted); font-weight: 500; }
+    .pocket .vl { font-size: 11.5px; font-weight: 800; }
+    .s-fab {
+      position: absolute; bottom: 16px; left: 16px; right: 16px;
+      background: var(--accent); color: #fff; text-align: center;
+      border-radius: 30px; padding: 11px; font-size: 13px; font-weight: 800;
+    }
+
+    .chip {
+      position: absolute; background: #fff; border-radius: 16px;
+      padding: 10px 14px; font-size: 13px; font-weight: 700;
+      box-shadow: 0 12px 28px rgba(59, 37, 48, .14);
+      display: flex; align-items: center; gap: 8px; white-space: nowrap;
+    }
+    .chip .e { font-size: 18px; }
+    .chip.c1 { top: 60px; left: -10px; animation: float 5s ease-in-out infinite .4s; }
+    .chip.c2 { bottom: 110px; right: -16px; animation: float 5.5s ease-in-out infinite 1s; }
+    .chip.c3 { bottom: 30px; left: 0; animation: float 6.5s ease-in-out infinite .7s; }
+    @media (max-width: 420px) {
+      .chip.c1 { left: -4px; } .chip.c2 { right: -4px; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .marquee {
+      background: var(--deep); color: #fff; overflow: hidden;
+      padding: 14px 0; transform: rotate(-1.5deg); margin: 10px -20px 0;
+    }
+    .marquee .track {
+      display: flex; gap: 36px; width: max-content;
+      animation: scroll 28s linear infinite; font-weight: 800; font-size: 17px;
+    }
+    .marquee .track span { display: inline-flex; align-items: center; gap: 36px; }
+    .marquee .track span::after { content: "✦"; color: var(--accent); }
+    @keyframes scroll { to { transform: translateX(-50%); } }
+
+    section { padding: 80px 0; }
+    .eyebrow {
+      display: inline-block; font-size: 13px; font-weight: 800; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent-dark); margin-bottom: 8px;
+    }
+    h2 { font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -1px; }
+    .sub { color: var(--muted); font-size: 17px; max-width: 560px; margin: 0 0 40px; }
+    .center { text-align: center; }
+    .center .sub { margin-left: auto; margin-right: auto; }
+
+    .features { display: grid; gap: 18px; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .features { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 960px) { .features { grid-template-columns: repeat(4, 1fr); } }
+    .feature {
+      background: var(--card); border: 2px solid var(--deep); border-radius: 24px;
+      padding: 24px; box-shadow: 6px 6px 0 var(--deep);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .feature:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--deep); }
+    .feature .ic {
+      width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center;
+      font-size: 28px; margin-bottom: 16px; border: 2px solid var(--deep);
+    }
+    .feature h3 { margin: 0 0 6px; font-size: 18px; }
+    .feature p { margin: 0; color: var(--muted); font-size: 14.5px; }
+
+    .split {
+      display: grid; gap: 40px; align-items: center; grid-template-columns: 1fr;
+      background: linear-gradient(135deg, #fde4ea, #fff1dc);
+      border-radius: 36px; padding: 40px 28px;
+    }
+    @media (min-width: 860px) { .split { grid-template-columns: 1fr 1fr; padding: 56px; } }
+    .alloc { background: #fff; border-radius: 24px; padding: 22px; box-shadow: 0 16px 40px rgba(59, 37, 48, .1); }
+    .alloc h4 { margin: 0 0 4px; font-size: 15px; }
+    .alloc .tot { font-size: 30px; font-weight: 800; margin: 0 0 16px; letter-spacing: -.5px; }
+    .row { margin-bottom: 14px; }
+    .row .top { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .row .top span:last-child { color: var(--muted); font-weight: 600; }
+    .track-bar { height: 12px; border-radius: 10px; background: #f4e8eb; overflow: hidden; }
+    .track-bar i { display: block; height: 100%; border-radius: 10px; }
+    .checks { list-style: none; padding: 0; margin: 0; }
+    .checks li { display: flex; gap: 12px; margin-bottom: 14px; font-size: 16px; }
+    .checks li::before {
+      content: "✓"; flex: 0 0 26px; height: 26px; border-radius: 50%;
+      background: var(--deep); color: #fff; display: grid; place-items: center;
+      font-size: 13px; font-weight: 800; margin-top: 1px;
+    }
+
+    .steps { display: grid; gap: 16px; grid-template-columns: 1fr; counter-reset: s; }
+    @media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+    .step {
+      counter-increment: s; position: relative; background: #fff;
+      border-radius: 24px; padding: 28px 22px 22px; border: 1px solid #f0dce1;
+    }
+    .step::before {
+      content: counter(s); position: absolute; top: -18px; left: 22px;
+      width: 40px; height: 40px; border-radius: 12px; background: var(--accent);
+      color: #fff; font-weight: 800; font-size: 18px; display: grid; place-items: center;
+      box-shadow: 0 4px 0 var(--accent-dark);
+    }
+    .step h3 { margin: 6px 0 6px; font-size: 17px; }
+    .step p { margin: 0; color: var(--muted); font-size: 14.5px; }
+    .warn {
+      margin-top: 24px; background: var(--sun); border-radius: 20px; padding: 18px 22px;
+      display: flex; gap: 14px; align-items: flex-start; font-size: 15px;
+    }
+    .warn .e { font-size: 24px; line-height: 1; }
+    .warn b { display: block; margin-bottom: 2px; }
+
+    .faq { max-width: 720px; margin: 0 auto; }
+    details {
+      background: #fff; border-radius: 18px; border: 2px solid var(--deep);
+      padding: 16px 20px; margin-bottom: 12px;
+    }
+    summary { cursor: pointer; font-weight: 700; font-size: 16px; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; font-size: 22px; line-height: 1; color: var(--accent-dark); }
+    details[open] summary::after { content: "−"; }
+    details p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
+
+    .final {
+      background: var(--deep); color: #fff; border-radius: 36px;
+      padding: 56px 28px; text-align: center; position: relative; overflow: hidden;
+    }
+    .final h2 { color: #fff; }
+    .final p { color: #e8d6dc; margin: 0 auto 28px; max-width: 480px; }
+    .final .blob { opacity: .35; }
+    .final .inner { position: relative; z-index: 1; }
+
+    footer { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 0 48px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .phone, .chip, .marquee .track { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="wrap">
+      <a class="brand" href="#"><span class="mark">F</span>FinTracker</a>
+      <a class="nav-btn" href="#download">Download</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+
+    <div class="wrap hero-grid">
+      <div>
+        <span class="pill"><span class="dot"></span>Versi 1.0 sudah rilis · Gratis</span>
+        <h1>Uang saku aman,<br><span class="hl">nggak boncos</span> di akhir bulan.</h1>
+        <p class="lead">FinTracker bantu kamu mencatat pemasukan, membagi uang ke kantong-kantong pengeluaran, dan tahu persis sisa uangmu setiap hari.</p>
+
+        <div class="cta-row" id="download">
+          <a class="btn" href="https://github.com/fintracker-app/fintracker-app.github.io/releases/latest/download/fintracker.apk">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.38.38 0 00-.66-.38l-1.86 3.22a11.4 11.4 0 00-9.84 0L5.22 5.92a.38.38 0 00-.66.38L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/></svg>
+            <span>Download untuk Android<small>fintracker.apk · 34 MB</small></span>
+          </a>
+          <a class="btn-ghost" href="#cara-instal">Cara instal →</a>
+        </div>
+        <p class="mini">HP lama atau gagal dipasang? <a href="https://github.com/fintracker-app/fintracker-app.github.io/releases/latest/download/fintracker-hp-lama.apk">Download versi HP lama</a></p>
+      </div>
+
+      <div class="phone-zone">
+        <div class="phone">
+          <div class="screen">
+            <p class="s-hello">Halo, selamat datang 👋</p>
+            <p class="s-title">Ringkasan bulan ini</p>
+            <div class="s-balance">
+              <div class="lbl">Sisa uang saku</div>
+              <div class="amt">Rp 1.280.000</div>
+              <div class="s-bar"><i></i></div>
+              <div class="s-bar-note">64% masih tersisa · 12 hari lagi</div>
+            </div>
+            <div class="s-sec">Kantong kamu</div>
+            <div class="pocket">
+              <div class="ic" style="background:var(--sun)">🍜</div>
+              <div class="nm">Makan &amp; Jajan<span>Kebutuhan Pokok</span></div>
+              <div class="vl">Rp 540rb</div>
+            </div>
+            <div class="pocket">
+              <div class="ic" style="background:var(--sky)">🛵</div>
+              <div class="nm">Transportasi<span>Kebutuhan Variabel</span></div>
+              <div class="vl">Rp 210rb</div>
+            </div>
+            <div class="pocket">
+              <div class="ic" style="background:var(--mint)">🐷</div>
+              <div class="nm">Tabungan<span>Tabungan &amp; Dana Darurat</span></div>
+              <div class="vl">Rp 400rb</div>
+            </div>
+            <div class="s-fab">+ Tambah pemasukan</div>
+          </div>
+        </div>
+        <div class="chip c1"><span class="e">💸</span>+Rp 500.000 masuk</div>
+        <div class="chip c2"><span class="e">🎯</span>Tabungan 80%</div>
+        <div class="chip c3"><span class="e">📷</span>Struk terbaca!</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <span>Catat pemasukan</span><span>Bagi ke kantong</span><span>Pantau sisa uang</span><span>Scan struk</span><span>Rajin menabung</span><span>Gratis</span>
+      <span>Catat pemasukan</span><span>Bagi ke kantong</span><span>Pantau sisa uang</span><span>Scan struk</span><span>Rajin menabung</span><span>Gratis</span>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">Fitur</span>
+        <h2>Semua yang kamu butuh buat atur uang saku</h2>
+        <p class="sub">Simpel dipakai sehari-hari, tanpa ribet hitung manual.</p>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <div class="ic" style="background:var(--soft)">💰</div>
+          <h3>Uang tetap</h3>
+          <p>Catat uang saku utama yang kamu terima rutin, dan lihat totalnya kapan saja.</p>
+        </div>
+        <div class="feature">
+          <div class="ic" style="background:var(--sun)">➕</div>
+          <h3>Pendapatan tambahan</h3>
+          <p>Dapat uang dari freelance atau hadiah? Tambahkan dan pilih mau dialokasikan ke mana.</p>
+        </div>
+        <div class="feature">
+          <div class="ic" style="background:var(--mint)">👛</div>
+          <h3>Kantong per kategori</h3>
+          <p>Pisahkan uang ke kantong makan, transportasi, hiburan, sampai tabungan dan dana darurat.</p>
+        </div>
+        <div class="feature">
+          <div class="ic" style="background:var(--sky)">📷</div>
+          <h3>Scan struk</h3>
+          <p>Foto struk belanja, lalu nama toko, item, dan totalnya terbaca otomatis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <span class="eyebrow">Alokasi otomatis</span>
+          <h2>Uang masuk, langsung terbagi rapi</h2>
+          <ul class="checks">
+            <li>Pemasukan dibagi ke kategori sesuai persentase yang kamu atur.</li>
+            <li>Mau langsung ditabung? Bisa masuk ke Kantong tabungan tanpa dibagi.</li>
+            <li>Atau kirim ke satu Kantong pilihanmu saja.</li>
+            <li>Masuk pakai email atau akun Google, data tersimpan di akunmu.</li>
+          </ul>
+        </div>
+        <div class="alloc">
+          <h4>Pemasukan bulan ini</h4>
+          <p class="tot">Rp 2.000.000</p>
+          <div class="row">
+            <div class="top"><span>🍚 Kebutuhan Pokok</span><span>50%</span></div>
+            <div class="track-bar"><i style="width:50%;background:var(--accent)"></i></div>
+          </div>
+          <div class="row">
+            <div class="top"><span>🛍️ Kebutuhan Variabel</span><span>30%</span></div>
+            <div class="track-bar"><i style="width:30%;background:#f5b45c"></i></div>
+          </div>
+          <div class="row" style="margin-bottom:0">
+            <div class="top"><span>🐷 Tabungan &amp; Dana Darurat</span><span>20%</span></div>
+            <div class="track-bar"><i style="width:20%;background:#5fcf9f"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cara-instal" style="padding-top:20px">
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">Cara instal</span>
+        <h2>Pasang dalam 3 langkah</h2>
+        <p class="sub">FinTracker dibagikan langsung dari halaman ini, jadi caranya sedikit beda dari Play Store.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Download APK</h3>
+          <p>Tekan tombol Download di atas, lalu tunggu sampai file fintracker.apk selesai diunduh.</p>
+        </div>
+        <div class="step">
+          <h3>Izinkan instalasi</h3>
+          <p>Buka file-nya. Kalau muncul "Instal aplikasi tidak dikenal", ketuk Setelan dan izinkan untuk browser-mu.</p>
+        </div>
+        <div class="step">
+          <h3>Instal &amp; daftar</h3>
+          <p>Ketuk Instal, buka FinTracker, lalu daftar pakai email atau akun Google. Selesai!</p>
+        </div>
+      </div>
+      <div class="warn">
+        <span class="e">⏳</span>
+        <div>
+          <b>Muncul peringatan atau diminta menunggu?</b>
+          Itu normal untuk aplikasi dari luar Play Store. Sebagian HP meminta konfirmasi tambahan atau masa tunggu sekitar 24 jam sebelum instalasi pertama. Ikuti petunjuk di layar, lalu buka lagi file APK-nya setelah masa tunggu selesai.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:20px">
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">FAQ</span>
+        <h2>Yang sering ditanyakan</h2>
+      </div>
+      <div class="faq" style="margin-top:32px">
+        <details>
+          <summary>Pilih file yang mana?</summary>
+          <p>Pakai fintracker.apk untuk hampir semua HP Android. Kalau muncul pesan "aplikasi tidak kompatibel" atau gagal dipasang, coba versi HP lama.</p>
+        </details>
+        <details>
+          <summary>FinTracker gratis?</summary>
+          <p>Iya, gratis.</p>
+        </details>
+        <details>
+          <summary>Ada versi iPhone?</summary>
+          <p>Belum. FinTracker saat ini hanya tersedia untuk Android.</p>
+        </details>
+        <details>
+          <summary>Cara update ke versi baru?</summary>
+          <p>Download lagi dari halaman ini lalu instal di atas versi lama. Datamu tetap aman karena tersimpan di akunmu, tidak perlu uninstal.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:20px">
+    <div class="wrap">
+      <div class="final">
+        <div class="blob b1" style="top:-80px;left:-80px"></div>
+        <div class="blob b2" style="top:auto;bottom:-100px;right:-60px"></div>
+        <div class="inner">
+          <h2>Siap atur uang saku<br>lebih rapi?</h2>
+          <p>Download FinTracker sekarang dan mulai bulan ini tanpa boncos.</p>
+          <a class="btn" href="https://github.com/fintracker-app/fintracker-app.github.io/releases/latest/download/fintracker.apk">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.38.38 0 00-.66-.38l-1.86 3.22a11.4 11.4 0 00-9.84 0L5.22 5.92a.38.38 0 00-.66.38L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/></svg>
+            <span>Download untuk Android<small>Gratis · 34 MB</small></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    FinTracker · Tugas Kelompok 9
+  </footer>
+
+</body>
+</html>
