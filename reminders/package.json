@@ -1,0 +1,8 @@
+{
+  "name": "fintracker-reminders",
+  "private": true,
+  "description": "Pengirim pengingat FinTracker versi web",
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}
