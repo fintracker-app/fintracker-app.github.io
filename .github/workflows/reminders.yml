@@ -1,0 +1,28 @@
+name: Pengingat FinTracker
+
+on:
+  schedule:
+    # Setiap 15 menit (waktu UTC). GitHub kadang terlambat beberapa menit.
+    - cron: '*/15 * * * *'
+  # Supaya bisa dijalankan manual dari tab Actions (untuk uji coba)
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Pasang firebase-admin
+        working-directory: reminders
+        run: npm install --omit=dev
+
+      - name: Kirim pengingat
+        working-directory: reminders
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node send.js
