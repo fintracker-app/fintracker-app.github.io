@@ -241,6 +241,39 @@
       margin-top: 24px; background: var(--sun); border-radius: 20px; padding: 18px 22px;
       display: flex; gap: 14px; align-items: flex-start; font-size: 15px;
     }
+
+    .part-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 20px; font-weight: 800; margin: 0 0 6px;
+    }
+    .part-title .tag {
+      font-size: 12px; font-weight: 800; letter-spacing: .5px;
+      background: var(--deep); color: #fff; padding: 4px 10px; border-radius: 20px;
+    }
+    .part-sub { color: var(--muted); font-size: 15px; margin: 0 0 22px; }
+
+    .setup {
+      background: #fff; border: 2px solid var(--deep); border-radius: 24px;
+      padding: 24px 22px; margin-bottom: 44px; box-shadow: 6px 6px 0 var(--deep);
+    }
+    .setup ol { counter-reset: a; list-style: none; padding: 0; margin: 0; }
+    .setup li {
+      counter-increment: a; position: relative;
+      padding: 0 0 16px 46px; font-size: 15px;
+    }
+    .setup li:last-child { padding-bottom: 0; }
+    .setup li::before {
+      content: counter(a); position: absolute; left: 0; top: 0;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--soft); color: var(--accent-dark);
+      font-weight: 800; display: grid; place-items: center; font-size: 14px;
+    }
+    .setup li b { display: block; }
+    .setup li span { color: var(--muted); }
+    .setup .time {
+      display: inline-block; margin-top: 4px; font-size: 12.5px; font-weight: 800;
+      background: var(--sun); padding: 2px 10px; border-radius: 12px;
+    }
     .warn .e { font-size: 24px; line-height: 1; }
     .warn b { display: block; margin-bottom: 2px; }
 
@@ -411,12 +444,55 @@
   </section>
 
   <section id="cara-instal" style="padding-top:20px">
-    <div class="wrap">
+    <div class="wrap" style="max-width:860px">
       <div class="center">
         <span class="eyebrow">Cara instal</span>
-        <h2>Pasang dalam 3 langkah</h2>
-        <p class="sub">FinTracker dibagikan langsung dari halaman ini, jadi caranya sedikit beda dari Play Store.</p>
+        <h2>Pasang FinTracker</h2>
+        <p class="sub">FinTracker dibagikan langsung dari halaman ini, bukan lewat Play Store. Karena itu Android meminta satu pengaturan khusus, cukup sekali per HP.</p>
       </div>
+
+      <div class="warn" style="margin:0 0 32px">
+        <span class="e">🛡️</span>
+        <div>
+          <b>Muncul "Aplikasi diblokir untuk melindungi perangkat Anda"?</b>
+          Itu normal untuk aplikasi dari luar Play Store di Indonesia. Ketuk Oke, lalu ikuti Bagian A di bawah. Setelah itu FinTracker bisa dipasang.
+        </div>
+      </div>
+
+      <p class="part-title"><span class="tag">BAGIAN A</span>Sekali saja di HP-mu</p>
+      <p class="part-sub">Mengizinkan aplikasi dari developer yang belum terverifikasi. Nama menu bisa sedikit berbeda di tiap merek HP.</p>
+      <div class="setup">
+        <ol>
+          <li>
+            <b>Aktifkan Opsi pengembang</b>
+            <span>Setelan → Tentang ponsel → Informasi perangkat lunak → ketuk "Nomor versi" 7 kali sampai muncul pesan Opsi pengembang aktif.</span>
+          </li>
+          <li>
+            <b>Buka menu developer tidak terverifikasi</b>
+            <span>Setelan → Opsi pengembang → pilih "Aplikasi dari developer yang tidak terverifikasi".</span>
+          </li>
+          <li>
+            <b>Nyalakan izinnya</b>
+            <span>Aktifkan "Izinkan aplikasi dari developer yang tidak terverifikasi", lalu konfirmasi dengan PIN atau sidik jari.</span>
+          </li>
+          <li>
+            <b>Jawab pertanyaan keamanan</b>
+            <span>Pilih bahwa tidak ada orang yang memintamu mengubah setelan ini.</span>
+          </li>
+          <li>
+            <b>Restart HP, lalu tunggu</b>
+            <span>Ini masa tunggu keamanan dari Google, bukan dari FinTracker.</span><br>
+            <span class="time">⏳ 24 jam</span>
+          </li>
+          <li>
+            <b>Kembali ke menu yang sama</b>
+            <span>Setelah 24 jam, buka lagi menu di langkah 2 dan pilih izinkan untuk 7 hari atau seterusnya. Opsi pengembang boleh dimatikan lagi setelah ini.</span>
+          </li>
+        </ol>
+      </div>
+
+      <p class="part-title"><span class="tag">BAGIAN B</span>Instal FinTracker</p>
+      <p class="part-sub">Lakukan setelah Bagian A selesai.</p>
       <div class="steps">
         <div class="step">
           <h3>Download APK</h3>
@@ -428,14 +504,15 @@
         </div>
         <div class="step">
           <h3>Instal &amp; daftar</h3>
-          <p>Ketuk Instal, buka FinTracker, lalu daftar pakai email atau akun Google. Selesai!</p>
+          <p>Kalau ada peringatan, pilih "Tetap instal". Buka FinTracker, lalu daftar pakai email atau akun Google. Selesai!</p>
         </div>
       </div>
+
       <div class="warn">
-        <span class="e">⏳</span>
+        <span class="e">💡</span>
         <div>
-          <b>Muncul peringatan atau diminta menunggu?</b>
-          Itu normal untuk aplikasi dari luar Play Store. Sebagian HP meminta konfirmasi tambahan atau masa tunggu sekitar 24 jam sebelum instalasi pertama. Ikuti petunjuk di layar, lalu buka lagi file APK-nya setelah masa tunggu selesai.
+          <b>Menu di Bagian A tidak ada?</b>
+          Fitur ini dibagikan Google secara bertahap. Coba perbarui sistem HP (Setelan → Pembaruan sistem / Pembaruan sistem Google Play), lalu cek lagi beberapa hari kemudian.
         </div>
       </div>
     </div>
@@ -451,6 +528,10 @@
         <details>
           <summary>Pilih file yang mana?</summary>
           <p>Pakai fintracker.apk untuk hampir semua HP Android. Kalau muncul pesan "aplikasi tidak kompatibel" atau gagal dipasang, coba versi HP lama.</p>
+        </details>
+        <details>
+          <summary>Kenapa harus menunggu 24 jam?</summary>
+          <p>Itu aturan keamanan Google untuk semua aplikasi yang dibagikan di luar Play Store, supaya orang tidak terburu-buru memasang aplikasi karena ditipu. Cukup sekali per HP. Setelah itu, update FinTracker berikutnya bisa langsung dipasang.</p>
         </details>
         <details>
           <summary>FinTracker gratis?</summary>
